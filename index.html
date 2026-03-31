@@ -1210,7 +1210,7 @@ function showModal(emoji,title,body,onOk){
 // ════════════════════════════════════════════
 //  KAYIT SISTEMI
 // ════════════════════════════════════════════
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwhWlK78oH5gFZje_GVvBViEAsjKZZpNkXjOt-SZAVWSmJSPP3j2X-fNh7AI_gv7ZIf/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxD3IJ6BEKFOsu6LEgxKWcGIz5yZsX9bc0oA6MBhs-XZbxfJVr3VY-DHmiVrBjzsNEJ/exec';
 
 function regValidate(){
   const ad=document.getElementById('reg-ad').value.trim();
@@ -1236,11 +1236,10 @@ async function submitRegistration(){
   msg.textContent='Lütfen bekleyin...';
 
   try {
-    await fetch(SHEET_URL, {
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ad,soyad,email})
+    const params = new URLSearchParams({ad, soyad, email});
+    await fetch(`${SHEET_URL}?${params.toString()}`, {
+      method:'GET',
+      mode:'no-cors'
     });
     // no-cors response is opaque, assume success
     localStorage.setItem('quranUser', JSON.stringify({ad,soyad,email,date:new Date().toISOString()}));
