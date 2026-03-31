@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kur'an-ı Kerim Öğreniyorum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Nunito:wght@400;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --deep:#080B18;--card:rgba(255,255,255,.045);--card-h:rgba(255,255,255,.09);
+      --gold:#F2C94C;--gold2:#D4A017;--teal:#4ECDC4;--coral:#E07A5F;
+      --green:#56CFB2;--purple:#A29BFE;--text:#F0EBE3;--muted:#8B87A6;
+      --border:rgba(242,201,76,.16);--radius:18px;
+    }
+    html,body{height:100%;background:var(--deep);color:var(--text);font-family:'Nunito',sans-serif;overflow-x:hidden}
+    #stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(90,20,160,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 85% 100%,rgba(0,100,130,.22) 0%,transparent 70%);pointer-events:none;z-index:0}
+    #app{position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:88px}
+
+    /* HEADER */
+    .header{padding:24px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start}
+    .logo{font-family:'Cinzel Decorative',serif;font-size:11px;color:var(--gold);line-height:1.4;white-space:nowrap}
+    .logo small{display:block;font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-top:2px}
+    .streak-pill{display:flex;align-items:center;gap:5px;background:rgba(242,201,76,.10);border:1px solid rgba(242,201,76,.3);border-radius:20px;padding:7px 14px;font-weight:900;font-size:13px;color:var(--gold);white-space:nowrap}
+
+    /* XP */
+    .xp-section{margin:0 20px 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+    .xp-row{display:flex;justify-content:space-between;margin-bottom:8px}
+    .xp-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+    .xp-val{font-size:11px;font-weight:900;color:var(--gold)}
+    .xp-bar{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}
+    .xp-fill{height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold),#ffe082);border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+
+    /* LABELS */
+    .sec-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);padding:0 20px;margin-bottom:12px}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:12px;padding:10px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+    .btn-teal{background:linear-gradient(135deg,var(--teal),#30b5ac);color:#fff}
+    .btn-teal:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(78,205,196,.4)}
+    .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1000}
+    .btn-gold:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(242,201,76,.4)}
+    .btn-ghost{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text)}
+    .btn-ghost:hover{background:rgba(255,255,255,.12)}
+    .btn-coral{background:linear-gradient(135deg,var(--coral),#c05a40);color:#fff}
+
+    /* STATS */
+    .stats-grid{margin:0 20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 14px;text-align:center}
+    .stat-num{font-size:30px;font-weight:900;color:var(--gold);line-height:1;margin-bottom:5px}
+    .stat-lbl{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+
+    /* DAILY CARD */
+    .daily-card{margin:0 20px 22px;background:linear-gradient(135deg,rgba(78,205,196,.13) 0%,rgba(162,155,254,.07) 100%);border:1px solid rgba(78,205,196,.3);border-radius:22px;padding:22px 20px;cursor:pointer;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+    .daily-card::after{content:'☽';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:56px;color:var(--teal);opacity:.08;pointer-events:none}
+    .daily-card:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(78,205,196,.18)}
+    .daily-card h3{font-size:17px;font-weight:900;color:var(--teal);margin-bottom:4px}
+    .daily-card p{font-size:13px;color:var(--muted);margin-bottom:16px}
+
+    /* LESSON LIST */
+    .lessons-list{padding:0 20px;display:flex;flex-direction:column;gap:12px}
+    .lesson-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px 16px;display:flex;align-items:center;gap:15px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+    .lesson-card.locked{opacity:.45;cursor:not-allowed}
+    .lesson-card:not(.locked):hover{background:var(--card-h);transform:translateX(5px);border-color:rgba(242,201,76,.35)}
+    .lesson-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+    .lesson-info{flex:1;min-width:0}
+    .lesson-title{font-size:15px;font-weight:900;margin-bottom:3px}
+    .lesson-sub{font-size:12px;color:var(--muted);font-weight:600}
+    .lesson-prog{margin-top:9px;height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+    .lesson-prog-fill{height:100%;border-radius:2px;transition:width .6s}
+    .lesson-caret{font-size:16px;color:var(--muted);flex-shrink:0}
+
+    /* LESSON CATEGORY HEADER */
+    .cat-header{padding:18px 20px 8px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);display:flex;align-items:center;gap:8px}
+    .cat-header::after{content:'';flex:1;height:1px;background:var(--border)}
+
+    /* LESSON VIEW */
+    .lv-topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 12px}
+    .lv-back{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px 14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;color:var(--text);cursor:pointer;transition:background .15s}
+    .lv-back:hover{background:var(--card-h)}
+    .lv-counter{font-size:13px;font-weight:900;color:var(--muted)}
+    .lv-prog-bar{margin:0 20px 20px;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+    .lv-prog-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+    .tts-badge{display:flex;justify-content:center;margin-bottom:12px}
+    .tts-ok{background:rgba(86,207,178,.12);color:var(--green);border:1px solid rgba(86,207,178,.25);border-radius:8px;padding:4px 12px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px}
+    .lv-stage{margin:0 20px 18px;background:linear-gradient(160deg,rgba(78,205,196,.07) 0%,rgba(162,155,254,.05) 100%);border:1px solid rgba(78,205,196,.2);border-radius:28px;padding:32px 20px 24px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s;user-select:none}
+    .lv-stage:hover{border-color:rgba(78,205,196,.45)}
+    .lv-stage.playing{border-color:var(--teal);box-shadow:0 0 0 3px rgba(78,205,196,.15),0 12px 40px rgba(78,205,196,.15)}
+    .lv-ripple{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+    .lv-ripple span{position:absolute;width:120px;height:120px;border-radius:50%;border:2px solid var(--teal);opacity:0}
+    .lv-stage.playing .lv-ripple span:nth-child(1){animation:rippleOut 1.6s ease-out 0s infinite}
+    .lv-stage.playing .lv-ripple span:nth-child(2){animation:rippleOut 1.6s ease-out .4s infinite}
+    .lv-stage.playing .lv-ripple span:nth-child(3){animation:rippleOut 1.6s ease-out .8s infinite}
+    @keyframes rippleOut{0%{transform:scale(.5);opacity:.7}100%{transform:scale(3);opacity:0}}
+    .lv-arabic{font-family:'Amiri',serif;font-size:120px;line-height:1.1;direction:rtl;display:block;color:var(--text);position:relative;z-index:1;transition:transform .15s}
+    .lv-stage:active .lv-arabic{transform:scale(.93)}
+    .lv-tap-hint{font-size:11px;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:1.2px;margin-top:10px;position:relative;z-index:1;opacity:.7}
+    .lv-stage.playing .lv-tap-hint{opacity:1}
+    .lv-names{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 20px 18px;flex-wrap:wrap}
+    .lv-name-tr{font-size:22px;font-weight:900;color:var(--text)}
+    .lv-name-ar{font-family:'Amiri',serif;font-size:22px;direction:rtl;color:var(--gold)}
+    .lv-name-rom{font-size:12px;font-weight:800;color:var(--muted);background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:4px 10px;letter-spacing:.5px}
+    .lv-info{margin:0 20px 20px;display:flex;flex-direction:column;gap:10px}
+    .lv-info-row{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+    .lv-info-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+    .lv-info-label{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px}
+    .lv-info-text{font-size:13px;font-weight:600;color:var(--text);line-height:1.55}
+    .lv-example-ar{font-family:'Amiri',serif;font-size:32px;direction:rtl;color:var(--teal);display:block;margin-bottom:2px}
+    .lv-example-tr{font-size:12px;color:var(--muted);font-weight:700}
+    .lv-nav{display:flex;gap:12px;padding:0 20px;margin-bottom:24px}
+    .lv-nav .btn{flex:1;justify-content:center}
+
+    /* SURELER */
+    .surah-view{padding:0}
+    .surah-topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px}
+    .surah-title{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--gold)}
+    .surah-verses{padding:0 20px;display:flex;flex-direction:column;gap:10px}
+    .verse-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px 16px;cursor:pointer;transition:all .2s}
+    .verse-card:hover{background:var(--card-h);border-color:rgba(242,201,76,.3)}
+    .verse-card.playing{border-color:var(--teal);background:rgba(78,205,196,.07)}
+    .verse-ar{font-family:'Amiri',serif;font-size:26px;direction:rtl;text-align:right;line-height:1.8;color:var(--text);display:block;margin-bottom:10px}
+    .verse-tr{font-size:12px;color:var(--muted);font-weight:600;line-height:1.6}
+    .verse-num{display:inline-block;width:22px;height:22px;border-radius:50%;background:rgba(242,201,76,.15);border:1px solid rgba(242,201,76,.3);text-align:center;line-height:20px;font-size:10px;font-weight:900;color:var(--gold);margin-bottom:8px}
+
+    /* TECVID */
+    .tecvid-view{padding:0}
+    .tecvid-rule{margin:0 20px 14px;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+    .tecvid-rule-header{padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer}
+    .tecvid-rule-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+    .tecvid-rule-title{font-size:14px;font-weight:900}
+    .tecvid-rule-sub{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+    .tecvid-rule-body{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
+    .tecvid-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px}
+    .tecvid-item-name{font-size:13px;font-weight:900;color:var(--gold);margin-bottom:6px}
+    .tecvid-item-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+    .tecvid-example{font-family:'Amiri',serif;font-size:22px;direction:rtl;color:var(--text);display:block;margin-bottom:4px}
+    .tecvid-example-tr{font-size:11px;color:var(--muted);font-style:italic}
+
+    /* PRATIK HUB */
+    .pratik-grid{padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .pratik-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px 14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+    .pratik-card:hover{background:var(--card-h);transform:translateY(-3px)}
+    .pratik-card.highlight{border-color:rgba(242,201,76,.35);background:rgba(242,201,76,.05)}
+    .pratik-icon{font-size:36px;display:block;margin-bottom:10px}
+    .pratik-name{font-size:13px;font-weight:900;margin-bottom:4px}
+    .pratik-desc{font-size:10px;color:var(--muted);font-weight:700;line-height:1.4}
+    .pratik-badge{position:absolute;top:10px;right:10px;background:var(--teal);color:#000;font-size:9px;font-weight:900;padding:2px 7px;border-radius:6px}
+
+    /* QUIZ */
+    .quiz-wrap{padding:20px}
+    .quiz-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    .quiz-counter{font-weight:900;font-size:13px;color:var(--muted)}
+    .quiz-correct{font-weight:900;font-size:13px;color:var(--green)}
+    .prog-bar{height:6px;background:rgba(255,255,255,.07);border-radius:3px;margin-bottom:20px;overflow:hidden}
+    .prog-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:3px;transition:width .4s}
+    .lives{display:flex;justify-content:center;gap:8px;margin-bottom:22px}
+    .heart{font-size:22px;transition:all .3s}
+    .heart.lost{opacity:.18;transform:scale(.75)}
+    .letter-box{text-align:center;margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:28px 20px 18px}
+    .arabic-big{font-family:'Amiri',serif;font-size:100px;line-height:1.15;direction:rtl;display:block;color:var(--text)}
+    .arabic-big.hareke{font-size:80px}
+    .letter-prompt{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-top:6px}
+    .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+    .opt{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:16px 10px;cursor:pointer;text-align:center;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;color:var(--text);transition:all .15s}
+    .opt sub{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-top:2px}
+    .opt:hover:not(:disabled){background:var(--card-h);border-color:var(--gold);transform:translateY(-2px)}
+    .opt.correct{background:rgba(86,207,178,.18);border-color:var(--green);color:var(--green);animation:bounceCorrect .5s ease}
+    .opt.wrong{background:rgba(224,122,95,.18);border-color:var(--coral);color:var(--coral);animation:shakeWrong .4s ease}
+    @keyframes bounceCorrect{0%{transform:scale(1)}40%{transform:scale(1.09)}70%{transform:scale(.97)}100%{transform:scale(1)}}
+    @keyframes shakeWrong{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+    .quiz-footer{text-align:center;font-size:13px;color:var(--muted);font-weight:700;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
+    .quiz-footer span{color:var(--gold);font-size:17px;font-weight:900}
+
+    /* QUIZ MODE SELECTOR */
+    .quiz-mode-bar{display:flex;margin:0 20px 16px;gap:8px;padding:4px;background:rgba(255,255,255,.04);border-radius:14px;border:1px solid var(--border)}
+    .quiz-mode-btn{flex:1;padding:10px 6px;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:11px;cursor:pointer;color:var(--muted);background:transparent;transition:all .2s;text-align:center;letter-spacing:.3px}
+    .quiz-mode-btn.active{background:rgba(242,201,76,.15);color:var(--gold);border:1px solid rgba(242,201,76,.3)}
+
+    /* RESULT */
+    .result-box{text-align:center;padding:40px 24px;animation:fadeUp .4s ease}
+    .result-emoji{font-size:76px;display:block;margin-bottom:18px;animation:popIn .5s ease}
+    .result-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--gold);margin-bottom:6px}
+    .result-sub{font-size:14px;color:var(--muted);margin-bottom:28px}
+    .result-stats{display:flex;justify-content:center;gap:28px;margin-bottom:32px}
+    .r-stat-num{font-size:38px;font-weight:900;line-height:1}
+    .r-stat-lbl{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+    .result-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    @keyframes popIn{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.15) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
+
+    /* CANVAS YAZMA */
+    .yazma-wrap{padding:20px}
+    .yazma-ref{text-align:center;margin-bottom:16px}
+    .yazma-ref-letter{font-family:'Amiri',serif;font-size:90px;direction:rtl;color:rgba(255,255,255,.15);display:block;margin-bottom:4px}
+    .yazma-ref-name{font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+    .yazma-canvas-wrap{position:relative;margin:0 auto 16px;width:100%;max-width:320px;aspect-ratio:1;border-radius:20px;overflow:hidden;border:2px solid var(--border);background:rgba(255,255,255,.03)}
+    .yazma-ghost{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:160px;direction:rtl;color:rgba(242,201,76,.08);pointer-events:none;user-select:none;z-index:0}
+    #yazma-canvas{position:relative;z-index:1;width:100%;height:100%;cursor:crosshair;touch-action:none}
+    .yazma-actions{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+    .yazma-nav{display:flex;gap:12px;padding:0}
+    .yazma-nav .btn{flex:1;justify-content:center}
+    .yazma-counter{text-align:center;font-size:12px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+
+    /* PROFIL */
+    .profil-section{margin:0 20px 20px;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+    .profil-row{display:flex;align-items:center;justify-content:space-between;padding:16px}
+    .profil-row+.profil-row{border-top:1px solid var(--border)}
+    .profil-label{font-size:14px;font-weight:800}
+    .profil-sub{font-size:11px;color:var(--muted);margin-top:2px}
+    .toggle{width:44px;height:24px;background:rgba(255,255,255,.1);border:1px solid var(--border);border-radius:12px;position:relative;cursor:pointer;transition:background .2s}
+    .toggle.on{background:var(--teal)}
+    .toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+    .toggle.on::after{transform:translateX(20px)}
+
+    /* BADGES */
+    .badges-grid{padding:0 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .badge-item{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px 8px 14px;text-align:center;transition:all .2s}
+    .badge-item.earned{border-color:rgba(242,201,76,.38);background:rgba(242,201,76,.06)}
+    .badge-item.earned:hover{transform:scale(1.06);box-shadow:0 6px 24px rgba(242,201,76,.18)}
+    .badge-icon{font-size:34px;display:block;margin-bottom:7px;filter:grayscale(1);opacity:.35;transition:all .3s}
+    .badge-item.earned .badge-icon{filter:none;opacity:1}
+    .badge-name{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
+    .badge-item.earned .badge-name{color:var(--gold)}
+
+    /* TOAST & MODAL */
+    .toast{position:fixed;top:24px;left:50%;transform:translateX(-50%);background:rgba(242,201,76,.92);color:#0d0800;font-weight:900;font-size:15px;padding:11px 24px;border-radius:16px;pointer-events:none;z-index:9999;white-space:nowrap;animation:toastAnim 1.6s ease forwards}
+    @keyframes toastAnim{0%{opacity:0;transform:translateX(-50%) translateY(-12px)}15%{opacity:1;transform:translateX(-50%) translateY(0)}75%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-12px)}}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:500;animation:fadeIn .2s ease;padding:20px}
+    .modal-box{background:#0f1228;border:1px solid rgba(242,201,76,.3);border-radius:24px;padding:32px 24px;text-align:center;max-width:360px;width:100%;animation:slideUp .3s ease;max-height:80vh;overflow-y:auto}
+    .modal-emoji{font-size:56px;display:block;margin-bottom:14px}
+    .modal-title{font-family:'Cinzel Decorative',serif;font-size:17px;color:var(--gold);margin-bottom:8px}
+    .modal-body{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+    @keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+    /* CHILD MODE */
+    body.child-mode .arabic-big{font-size:110px}
+    body.child-mode .lv-arabic{font-size:140px}
+    body.child-mode .opt{font-size:16px;padding:20px 10px}
+    body.child-mode .stat-num{font-size:36px}
+    .confetti-piece{position:fixed;top:-10px;border-radius:4px;animation:confettiFall linear forwards;pointer-events:none;z-index:9998}
+    @keyframes confettiFall{0%{transform:rotate(0deg) translateX(0);opacity:1}100%{transform:rotate(720deg) translateX(40px);opacity:0;top:110vh}}
+
+    /* SM2 badge */
+    .due-badge{background:rgba(224,122,95,.15);border:1px solid rgba(224,122,95,.3);color:var(--coral);border-radius:8px;padding:3px 9px;font-size:10px;font-weight:900}
+
+    /* NAV */
+    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(6,9,20,.96);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:100;padding:8px 0 20px}
+    .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 0;transition:all .2s}
+    .nav-icon{font-size:22px;transition:transform .2s}
+    .nav-label{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+    .nav-item.active .nav-icon{transform:scale(1.2)}
+    .nav-item.active .nav-label{color:var(--gold)}
+
+    /* PAGES */
+    .page{display:none}
+    .page.active{display:block;animation:fadeUp .3s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .page-hdr{padding:28px 20px 16px;font-family:'Cinzel Decorative',serif;font-size:15px;color:var(--gold)}
+  </style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div id="app">
+
+  <!-- HOME -->
+  <div id="page-home" class="page active">
+    <div class="header">
+      <div class="logo">Kur'an-ı Kerim Öğreniyorum<small>Hazırlayan: Fatih Özen · Seviye <span id="level-num">1</span></small></div>
+      <div class="streak-pill">🔥 <span id="streak-count">0</span> Gün</div>
+    </div>
+    <div class="xp-section">
+      <div class="xp-row"><span class="xp-label">Tecrübe Puanı</span><span class="xp-val"><span id="xp-cur">0</span> / <span id="xp-max">100</span> XP</span></div>
+      <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+    </div>
+    <p class="sec-label">Günlük Görev</p>
+    <div class="daily-card" onclick="navigate('pratik')">
+      <h3>✦ Bugünkü Pratik</h3>
+      <p id="daily-desc">Akıllı tekrar sıranda bekleyen harfler var!</p>
+      <button class="btn btn-teal">Başla →</button>
+    </div>
+    <p class="sec-label">İstatistikler</p>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num" id="stat-lessons">0</div><div class="stat-lbl">Tamamlanan Ders</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-acc">—</div><div class="stat-lbl">Doğruluk</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-xp">0</div><div class="stat-lbl">Toplam XP</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-badges">0</div><div class="stat-lbl">Rozet</div></div>
+    </div>
+  </div>
+
+  <!-- DERSLER -->
+  <div id="page-lessons" class="page">
+    <div class="page-hdr">Dersler</div>
+    <div id="lessons-list"></div>
+  </div>
+
+  <!-- LESSON VIEW -->
+  <div id="page-lesson" class="page">
+    <div class="lv-topbar">
+      <button class="lv-back" onclick="navigate('lessons')">← Dersler</button>
+      <span class="lv-counter" id="lv-counter">1 / 5</span>
+      <span style="font-size:11px;font-weight:800;color:var(--muted)" id="lv-title-top"></span>
+    </div>
+    <div class="lv-prog-bar"><div class="lv-prog-fill" id="lv-prog-fill" style="width:0%"></div></div>
+    <div class="tts-badge"><span class="tts-ok" id="tts-badge">🔊 Harfe dokun, sesini duy</span></div>
+    <div class="lv-stage" id="lv-stage" onclick="playCurrentLetter()">
+      <div class="lv-ripple"><span></span><span></span><span></span></div>
+      <span class="lv-arabic" id="lv-arabic">ا</span>
+      <div class="lv-tap-hint" id="lv-tap-hint">🔊 Sesi duymak için dokun</div>
+    </div>
+    <div class="lv-names">
+      <span class="lv-name-tr" id="lv-name-tr">Elif</span>
+      <span class="lv-name-ar" id="lv-name-ar">أَلِف</span>
+      <span class="lv-name-rom" id="lv-name-rom">A/Ā</span>
+    </div>
+    <div class="lv-info">
+      <div class="lv-info-row"><span class="lv-info-icon">📍</span><div><div class="lv-info-label">Çıkış Noktası (Makhraj)</div><div class="lv-info-text" id="lv-makhraj">—</div></div></div>
+      <div class="lv-info-row"><span class="lv-info-icon">✦</span><div><div class="lv-info-label">Açıklama</div><div class="lv-info-text" id="lv-desc">—</div></div></div>
+      <div class="lv-info-row"><span class="lv-info-icon">📝</span><div><div class="lv-info-label">Örnek Kelime</div><span class="lv-example-ar" id="lv-ex-ar">—</span><span class="lv-example-tr" id="lv-ex-tr">—</span></div></div>
+    </div>
+    <div class="lv-nav">
+      <button class="btn btn-ghost" id="lv-btn-prev" onclick="lvPrev()">← Önceki</button>
+      <button class="btn btn-gold" id="lv-btn-next" onclick="lvNext()">Sonraki →</button>
+    </div>
+  </div>
+
+  <!-- SURAH VIEW -->
+  <div id="page-surah" class="page">
+    <div class="surah-view">
+      <div class="surah-topbar">
+        <button class="lv-back" onclick="navigate('lessons')">← Dersler</button>
+        <span class="surah-title" id="surah-title">Sure</span>
+        <div style="width:60px"></div>
+      </div>
+      <div class="surah-verses" id="surah-verses"></div>
+      <div style="height:20px"></div>
+    </div>
+  </div>
+
+  <!-- TECVID VIEW -->
+  <div id="page-tecvid" class="page">
+    <div class="tecvid-view">
+      <div class="surah-topbar">
+        <button class="lv-back" onclick="navigate('lessons')">← Dersler</button>
+        <span class="surah-title">Tecvid Kuralları</span>
+        <div style="width:60px"></div>
+      </div>
+      <div id="tecvid-content"></div>
+      <div style="height:20px"></div>
+    </div>
+  </div>
+
+  <!-- PRATİK HUB -->
+  <div id="page-pratik" class="page">
+    <div class="page-hdr">Pratik</div>
+    <div class="pratik-grid" id="pratik-grid"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="page-quiz" class="page">
+    <div id="quiz-mode-bar-wrap">
+      <div class="quiz-mode-bar">
+        <button class="quiz-mode-btn active" id="qmode-harf"    onclick="setQuizMode('harf')">🔤 Harf Quizi</button>
+        <button class="quiz-mode-btn"        id="qmode-hareke"  onclick="setQuizMode('hareke')">✨ Hareke Quizi</button>
+        <button class="quiz-mode-btn"        id="qmode-tekrar"  onclick="setQuizMode('tekrar')">🔁 Akıllı Tekrar</button>
+      </div>
+    </div>
+    <div id="quiz-inner"></div>
+  </div>
+
+  <!-- YAZMA -->
+  <div id="page-yazma" class="page">
+    <div class="yazma-wrap">
+      <div class="lv-topbar" style="padding:0 0 16px">
+        <button class="lv-back" onclick="navigate('pratik')">← Pratik</button>
+        <span class="lv-counter" id="yazma-counter-top">1 / 28</span>
+        <div style="width:60px"></div>
+      </div>
+      <div class="yazma-ref">
+        <span class="yazma-ref-letter" id="yazma-ref-letter">ا</span>
+        <div class="yazma-ref-name" id="yazma-ref-name">Elif</div>
+      </div>
+      <div class="yazma-canvas-wrap">
+        <div class="yazma-ghost" id="yazma-ghost">ا</div>
+        <canvas id="yazma-canvas"></canvas>
+      </div>
+      <div class="yazma-actions">
+        <button class="btn btn-ghost" onclick="yazmaClear()">🗑 Temizle</button>
+        <button class="btn btn-teal" onclick="yazmaPlay()">🔊 Dinle</button>
+      </div>
+      <div class="yazma-counter">Yazdıktan sonra değerlendir:</div>
+      <div class="yazma-nav">
+        <button class="btn btn-coral" onclick="yazmaJudge(false)">✗ Tekrar Dene</button>
+        <button class="btn btn-gold"  onclick="yazmaJudge(true)">✓ Doğru Yazdım</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFİL -->
+  <div id="page-profil" class="page">
+    <div class="page-hdr">Profil</div>
+    <div class="sec-label">Rozetlerim</div>
+    <div class="badges-grid" id="badges-grid" style="margin-bottom:24px"></div>
+    <div class="sec-label">Ayarlar</div>
+    <div class="profil-section">
+      <div class="profil-row">
+        <div><div class="profil-label">Çocuk Modu</div><div class="profil-sub">Daha büyük yazı ve eğlenceli efektler</div></div>
+        <div class="toggle" id="toggle-child" onclick="toggleChild()"></div>
+      </div>
+      <div class="profil-row">
+        <div><div class="profil-label">Günlük Hatırlatıcı</div><div class="profil-sub">Her gün bildirim al</div></div>
+        <div class="toggle" id="toggle-notif" onclick="toggleNotif()"></div>
+      </div>
+      <div class="profil-row" onclick="resetApp()" style="cursor:pointer">
+        <div><div class="profil-label" style="color:var(--coral)">İlerlemeyi Sıfırla</div><div class="profil-sub">Tüm veriler silinir</div></div>
+        <span style="color:var(--coral);font-size:18px">→</span>
+      </div>
+    </div>
+    <div style="text-align:center;padding:20px;font-size:11px;color:var(--muted)">v2.0 · Hazırlayan: Fatih Özen</div>
+  </div>
+
+</div>
+
+<nav class="bottom-nav">
+  <div class="nav-item active" id="nav-home"    onclick="navigate('home')">   <span class="nav-icon">🏠</span><span class="nav-label">Ana Sayfa</span></div>
+  <div class="nav-item"        id="nav-lessons" onclick="navigate('lessons')"><span class="nav-icon">📖</span><span class="nav-label">Dersler</span></div>
+  <div class="nav-item"        id="nav-pratik"  onclick="navigate('pratik')"> <span class="nav-icon">🎯</span><span class="nav-label">Pratik</span></div>
+  <div class="nav-item"        id="nav-profil"  onclick="navigate('profil')"> <span class="nav-icon">👤</span><span class="nav-label">Profil</span></div>
+</nav>
+
+<script>
+// ════════════════════════════════════════════
+//  VERİ: HARFLER
+// ════════════════════════════════════════════
+const LETTERS = [
+  {ar:'ا',name:'Elif', arabicName:'أَلِف', roman:'A/Ā', makhraj:'Gırtlaktan, uzatma harfidir.', desc:'Uzatma harfidir. Harekesiz sessizdir; fetha ile uzun "â" sesini verir.', example:{ar:'الله',tr:'Allah'}},
+  {ar:'ب',name:'Be',   arabicName:'بَاء',  roman:'B',   makhraj:'İki dudak birleşerek çıkar.', desc:'İki dudak kapanıp açılarak çıkarılır. Türkçe "b" sesine benzer.', example:{ar:'بيت',tr:'Beyt (ev)'}},
+  {ar:'ت',name:'Te',   arabicName:'تَاء',  roman:'T',   makhraj:'Dilin ucu üst ön dişlere değer.', desc:'Türkçedeki "t" sesine yakındır. Dilin ucu üst dişlerin arkasına dokunur.', example:{ar:'تمر',tr:'Temr (hurma)'}},
+  {ar:'ث',name:'Se',   arabicName:'ثَاء',  roman:'S̱',   makhraj:'Dilin ucu iki diş arasına konulur.', desc:'İngilizce "think" deki "th" sesine benzer. Dil dişler arasında yumuşakça çıkar.', example:{ar:'ثمر',tr:'Semer (meyve)'}},
+  {ar:'ج',name:'Cim',  arabicName:'جِيم',  roman:'C',   makhraj:'Dilin ortası üst damağa değer.', desc:'Türkçedeki "c" sesine benzer. Dilin ortası damağa sıkışarak çıkarılır.', example:{ar:'جنة',tr:'Cennet'}},
+  {ar:'ح',name:'Ha',   arabicName:'حَاء',  roman:'Ḥ',   makhraj:'Boğazın ortasından sıkıştırılarak.', desc:'Türkçe "h"den daha kuvvetlidir. Boğazın ortasından güçlü nefes ile çıkarılır.', example:{ar:'حق',tr:'Hak'}},
+  {ar:'خ',name:'Hı',   arabicName:'خَاء',  roman:'Kh',  makhraj:'Gırtlağın arka üst kısmından.', desc:'İspanyolca "j" ya da Almanca "ch" (Bach) sesine benzer. Gırtlaktan titreşimsiz çıkar.', example:{ar:'خير',tr:'Hayır'}},
+  {ar:'د',name:'Dal',  arabicName:'دَال',  roman:'D',   makhraj:'Dilin ucu üst ön dişlere değer.', desc:'Türkçedeki "d" sesine yakındır. Dilin ucu üst dişlerin iç tarafına dokunur.', example:{ar:'دين',tr:'Din'}},
+  {ar:'ذ',name:'Zel',  arabicName:'ذَال',  roman:'Dh',  makhraj:'Dilin ucu iki diş arasına.', desc:'İngilizce "the" deki sesli "th" gibidir. Dil dişler arasında titreşimli çıkar.', example:{ar:'ذكر',tr:'Zikir'}},
+  {ar:'ر',name:'Ra',   arabicName:'رَاء',  roman:'R',   makhraj:'Dilin ucu üst damak önü, genizden.', desc:'Türkçe "r"ye benzer fakat daha kuvvetlidir. İnce veya kalın okunabilir.', example:{ar:'رحمة',tr:'Rahmet'}},
+  {ar:'ز',name:'Ze',   arabicName:'زَاي',  roman:'Z',   makhraj:'Dilin ucu ön dişler arası, titreşimli.', desc:'Sin harfinin titreşimli halidir. Türkçedeki "z" sesine benzer.', example:{ar:'زيت',tr:'Zeyt (zeytin)'}},
+  {ar:'س',name:'Sin',  arabicName:'سِين',  roman:'S',   makhraj:'Dilin ucu ön alt dişlere yakın.', desc:'Türkçedeki "s" sesine benzer; dilin ucu daha geriye konumlanır.', example:{ar:'سلام',tr:'Selam'}},
+  {ar:'ش',name:'Şın',  arabicName:'شِين',  roman:'Sh',  makhraj:'Dilin ortası üst damağa yakın.', desc:'Türkçedeki "ş" sesine benzer. Dil ortasından geniş şekilde çıkarılır.', example:{ar:'شمس',tr:'Şems (güneş)'}},
+  {ar:'ص',name:'Sad',  arabicName:'صَاد',  roman:'Ṣ',   makhraj:'Kalın vurgulu "s"; dilin arkası kaldırılır.', desc:'Kalın ve vurgulu "s" sesidir. Sin harfinin kalın halidir.', example:{ar:'صبر',tr:'Sabır'}},
+  {ar:'ض',name:'Dad',  arabicName:'ضَاد',  roman:'Ḍ',   makhraj:'Dilin arka kenarları azı dişlerine değer.', desc:'Sadece Arapçaya özgü bir ses. Güçlü ve kalın "d" benzeri.', example:{ar:'ضوء',tr:'Zıya (ışık)'}},
+  {ar:'ط',name:'Tı',   arabicName:'طَاء',  roman:'Ṭ',   makhraj:'Dil ucu damağa, kalın "t".', desc:'Kalın ve güçlü "t" sesidir. Te harfinin kalın versiyonudur.', example:{ar:'طريق',tr:'Tarik (yol)'}},
+  {ar:'ظ',name:'Zı',   arabicName:'ظَاء',  roman:'Ẓ',   makhraj:'Dilin ucu dişler arası, kalın titreşimli.', desc:'Kalın "z" benzeri. Zel harfinin kalın halidir.', example:{ar:'ظلم',tr:'Zülüm'}},
+  {ar:'ع',name:'Ayn',  arabicName:'عَيْن', roman:'ʿ',   makhraj:'Boğazın ortasından sıkıştırılarak.', desc:'Boğazın ortasından güçlü titreşimli ses. Arapçaya özgüdür.', example:{ar:'عالم',tr:'Âlem'}},
+  {ar:'غ',name:'Gayn', arabicName:'غَيْن', roman:'Ġ',   makhraj:'Gırtlağın arka üst kısmından titreşimli.', desc:'Fransızca "r" sesine benzer. Hı harfinin titreşimli halidir.', example:{ar:'غفر',tr:'Gufran'}},
+  {ar:'ف',name:'Fe',   arabicName:'فَاء',  roman:'F',   makhraj:'Alt dudak üst ön dişlere hafifçe değer.', desc:'Türkçedeki "f" sesine benzer. Alt dudak üst dişlere değerken nefes çıkar.', example:{ar:'فجر',tr:'Fecir (şafak)'}},
+  {ar:'ق',name:'Kaf',  arabicName:'قَاف',  roman:'Q',   makhraj:'Dilin arkası küçük dilin hizasında damağa.', desc:'Kef harfinin kalın ve derin halidir. Dilin en arka kısmından kalın çıkar.', example:{ar:'قرآن',tr:'Kur\'an'}},
+  {ar:'ك',name:'Kef',  arabicName:'كَاف',  roman:'K',   makhraj:'Dilin ortası sert damağa değer.', desc:'Türkçedeki "k" sesine benzer. Dilin ortası üst damağa değerek çıkarılır.', example:{ar:'كتاب',tr:'Kitap'}},
+  {ar:'ل',name:'Lam',  arabicName:'لَام',  roman:'L',   makhraj:'Dilin kenarları üst ön dişlerin yanlarına.', desc:'Türkçedeki "l" sesine benzer. Allah lafzında özel kalın "l" kuralı vardır.', example:{ar:'لطيف',tr:'Latif'}},
+  {ar:'م',name:'Mim',  arabicName:'مِيم',  roman:'M',   makhraj:'İki dudak birleşirken genizden.', desc:'İki dudak kapalıyken genizden gelen ses. Türkçe "m" sesine benzer.', example:{ar:'مسجد',tr:'Mescit'}},
+  {ar:'ن',name:'Nun',  arabicName:'نُون',  roman:'N',   makhraj:'Dilin ucu üst damak önü, genizden.', desc:'Türkçedeki "n" sesine benzer. Genizden ses gelir, tecvidde özel kuralları var.', example:{ar:'نور',tr:'Nur (ışık)'}},
+  {ar:'ه',name:'He',   arabicName:'هَاء',  roman:'H',   makhraj:'Gırtlaktan hafif nefes olarak.', desc:'Gırtlaktan hafifçe nefes şeklinde çıkar. Türkçe "h" gibi.', example:{ar:'هدى',tr:'Hüda (hidayet)'}},
+  {ar:'و',name:'Vav',  arabicName:'وَاو',  roman:'V/Û', makhraj:'Dudaklar yuvarlaklaşıp öne uzatılır.', desc:'Hem "v/w" sesi hem uzun "û" sesi verir. Dudaklar yuvarlak konuma gelir.', example:{ar:'وقت',tr:'Vakit'}},
+  {ar:'ي',name:'Ye',   arabicName:'يَاء',  roman:'Y/Î', makhraj:'Dilin ortası üst damağa yaklaşır.', desc:'Hem "y" ünsüzü hem uzun "î" sesi olarak kullanılır.', example:{ar:'يوم',tr:'Yevm (gün)'}},
+];
+
+// ════════════════════════════════════════════
+//  VERİ: HAREKELER
+// ════════════════════════════════════════════
+const HAREKELER = [
+  {ar:'بَ',name:'Fetha',   desc:'Kısa "a" sesi verir',       speak:'فتحة'},
+  {ar:'بِ',name:'Kesra',   desc:'Kısa "i" sesi verir',       speak:'كسرة'},
+  {ar:'بُ',name:'Damme',   desc:'Kısa "u" sesi verir',       speak:'ضمة'},
+  {ar:'بْ',name:'Sükun',   desc:'Sessiz harf — hareke yok',  speak:'سكون'},
+  {ar:'بّ',name:'Şedde',   desc:'Harf iki kez okunur',       speak:'شدة'},
+  {ar:'بً',name:'Tenvin Fetha', desc:'"en" sesi ekler',      speak:'تنوين فتح'},
+  {ar:'بٍ',name:'Tenvin Kesra', desc:'"in" sesi ekler',      speak:'تنوين كسر'},
+  {ar:'بٌ',name:'Tenvin Damme', desc:'"un" sesi ekler',      speak:'تنوين ضم'},
+];
+
+// ════════════════════════════════════════════
+//  VERİ: DERSLER
+// ════════════════════════════════════════════
+const LESSONS = [
+  // Harfler
+  {id:'l1',title:'Temel Harfler I',  sub:'Elif → Cim · 5 harf',  icon:'🌙',color:'#4ECDC4',bg:'rgba(78,205,196,.12)', xp:50,  letters:[0,1,2,3,4], req:null, cat:'harfler'},
+  {id:'l2',title:'Temel Harfler II', sub:'Ha → Ze · 6 harf',     icon:'⭐',color:'#F2C94C',bg:'rgba(242,201,76,.12)',  xp:55,  letters:[5,6,7,8,9,10], req:'l1', cat:'harfler'},
+  {id:'l3',title:'Temel Harfler III',sub:'Sin → Tı · 5 harf',    icon:'✨',color:'#E07A5F',bg:'rgba(224,122,95,.12)',  xp:60,  letters:[11,12,13,14,15], req:'l2', cat:'harfler'},
+  {id:'l4',title:'Tüm Harfler',      sub:'Zı → Ye · kalan harfler',icon:'🌟',color:'#A29BFE',bg:'rgba(162,155,254,.12)',xp:70, letters:[16,17,18,19,20,21,22,23,24,25,26,27], req:'l3', cat:'harfler'},
+  // Harekeler & Medd
+  {id:'hareke',title:'Harekeler',     sub:'Fetha · Kesra · Damme · Sükun',icon:'🎵',color:'#56CFB2',bg:'rgba(86,207,178,.12)',  xp:80, req:'l4', cat:'hareke', isHareke:true},
+  {id:'madd',  title:'Uzun Sesler',   sub:'Medd · Elif · Vav · Ye',       icon:'🎶',color:'#fd79a8',bg:'rgba(253,121,168,.12)', xp:90, req:'hareke', cat:'hareke', isMadd:true},
+  // Tecvid
+  {id:'tecvid',title:'Tecvid Kuralları',sub:'Nun Sakin · Medd · Kalkale',icon:'📗',color:'#F2C94C',bg:'rgba(242,201,76,.12)', xp:100, req:'madd', cat:'tecvid', isTecvid:true},
+  // Kısa Sureler
+  {id:'fatiha', title:'Fatiha Suresi', sub:'7 ayet · Kur\'an\'ın anahtarı',  icon:'📖',color:'#4ECDC4',bg:'rgba(78,205,196,.12)', xp:120, req:'l1', cat:'sureler', surahId:'fatiha'},
+  {id:'ihlas',  title:'İhlas Suresi',  sub:'4 ayet · Tevhidin özeti',        icon:'📖',color:'#A29BFE',bg:'rgba(162,155,254,.12)',xp:80,  req:'l1', cat:'sureler', surahId:'ihlas'},
+  {id:'felak',  title:'Felak Suresi',  sub:'5 ayet · Kötülüklerden sığınma', icon:'📖',color:'#E07A5F',bg:'rgba(224,122,95,.12)', xp:80,  req:'ihlas', cat:'sureler', surahId:'felak'},
+  {id:'nas',    title:'Nas Suresi',    sub:'6 ayet · Vesveseden korunma',    icon:'📖',color:'#56CFB2',bg:'rgba(86,207,178,.12)', xp:80,  req:'felak', cat:'sureler', surahId:'nas'},
+  {id:'asr',    title:'Asr Suresi',    sub:'3 ayet · Zamana yemin',          icon:'📖',color:'#fd79a8',bg:'rgba(253,121,168,.12)',xp:70,  req:'l1', cat:'sureler', surahId:'asr'},
+  {id:'kevser', title:'Kevser Suresi', sub:'3 ayet · Bolluk ve bereket',     icon:'📖',color:'#F2C94C',bg:'rgba(242,201,76,.12)', xp:70,  req:'l1', cat:'sureler', surahId:'kevser'},
+];
+
+// ════════════════════════════════════════════
+//  VERİ: SURELER
+// ════════════════════════════════════════════
+const SURELER = {
+  fatiha:{name:'Fatiha Suresi',num:1,verses:[
+    {ar:'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',tr:'Rahman ve Rahim olan Allah\'ın adıyla'},
+    {ar:'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',tr:'Hamd, âlemlerin Rabbi Allah\'a mahsustur'},
+    {ar:'الرَّحْمَنِ الرَّحِيمِ',tr:'O Rahman\'dır, Rahim\'dir'},
+    {ar:'مَالِكِ يَوْمِ الدِّينِ',tr:'Din gününün (kıyamet gününün) sahibidir'},
+    {ar:'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ',tr:'Yalnız Sana ibadet eder, yalnız Senden yardım dileriz'},
+    {ar:'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ',tr:'Bizi doğru yola ilet'},
+    {ar:'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',tr:'Nimet verdiklerinin yoluna; gazaba uğrayanların ve sapkınların yoluna değil'},
+  ]},
+  ihlas:{name:'İhlas Suresi',num:112,verses:[
+    {ar:'قُلْ هُوَ اللَّهُ أَحَدٌ',tr:'De ki: O Allah birdir'},
+    {ar:'اللَّهُ الصَّمَدُ',tr:'Allah Samed\'dir (her şey O\'na muhtaç, O hiçbir şeye muhtaç değildir)'},
+    {ar:'لَمْ يَلِدْ وَلَمْ يُولَدْ',tr:'O doğurmadı ve doğurulmadı'},
+    {ar:'وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ',tr:'Ve O\'na denk olan hiçbir şey yoktur'},
+  ]},
+  felak:{name:'Felak Suresi',num:113,verses:[
+    {ar:'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ',tr:'De ki: Sabahın Rabbine sığınırım'},
+    {ar:'مِن شَرِّ مَا خَلَقَ',tr:'Yarattığı şeylerin şerrinden'},
+    {ar:'وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ',tr:'Karanlığı çöktüğünde gecenin şerrinden'},
+    {ar:'وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ',tr:'Düğümlere üfleyenlerin şerrinden'},
+    {ar:'وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ',tr:'Haset ettiğinde hasetçinin şerrinden'},
+  ]},
+  nas:{name:'Nas Suresi',num:114,verses:[
+    {ar:'قُلْ أَعُوذُ بِرَبِّ النَّاسِ',tr:'De ki: İnsanların Rabbine sığınırım'},
+    {ar:'مَلِكِ النَّاسِ',tr:'İnsanların Melik\'ine'},
+    {ar:'إِلَهِ النَّاسِ',tr:'İnsanların İlah\'ına'},
+    {ar:'مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ',tr:'Sinsi vesvesecinin şerrinden'},
+    {ar:'الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ',tr:'İnsanların göğüslerine vesvese veren'},
+    {ar:'مِنَ الْجِنَّةِ وَالنَّاسِ',tr:'Cinlerden ve insanlardan (olan)'},
+  ]},
+  asr:{name:'Asr Suresi',num:103,verses:[
+    {ar:'وَالْعَصْرِ',tr:'Asra (zamana) yemin olsun'},
+    {ar:'إِنَّ الْإِنسَانَ لَفِي خُسْرٍ',tr:'Gerçekten insan ziyandadır'},
+    {ar:'إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ',tr:'Ancak iman edip salih amel işleyenler, birbirlerine hakkı ve sabrı tavsiye edenler hariç'},
+  ]},
+  kevser:{name:'Kevser Suresi',num:108,verses:[
+    {ar:'إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ',tr:'Şüphesiz Biz sana Kevser\'i verdik'},
+    {ar:'فَصَلِّ لِرَبِّكَ وَانْحَرْ',tr:'O halde Rabbin için namaz kıl ve kurban kes'},
+    {ar:'إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ',tr:'Asıl sonu kesik olan seni çekemeyendir'},
+  ]},
+};
+
+// ════════════════════════════════════════════
+//  VERİ: TECVİD
+// ════════════════════════════════════════════
+const TECVID = [
+  {title:'Nun Sakin ve Tenvin',icon:'📗',color:'#4ECDC4',rules:[
+    {name:'İzhar (Açık Okuma)',icon:'💬',desc:'Nun sakin veya tenvin\'den sonra gırtlak harfleri (أ ه ع غ ح خ) gelirse nun açıkça okunur.',ar:'مَنْ أَمَنَ',tr:'Men emene'},
+    {name:'İdgam (Katma)',icon:'🔗',desc:'Nun sakin veya tenvin\'den sonra (ي ر م ل و ن) harfleri gelirse nun bu harfe katılır.',ar:'مِنْ رَبِّهِمْ',tr:'Min rabbihim → Mirabbihim'},
+    {name:'İhfa (Gizleme)',icon:'🌫️',desc:'Nun sakin veya tenvin\'den sonra 15 harf (ت ث ج د ذ ز س ش ص ض ط ظ ف ق ك) gelirse nun gizlenerek okunur.',ar:'مِنْ قَبْلِ',tr:'Min kabli (nun gizli)'},
+    {name:'İklab (Dönüştürme)',icon:'🔄',desc:'Nun sakin veya tenvin\'den sonra "ba" (ب) gelirse nun "mim"e dönüşür.',ar:'مِنْ بَعْدِ',tr:'Min ba\'di → Mim ba\'di'},
+  ]},
+  {title:'Medd — Uzatma Kuralları',icon:'📘',color:'#F2C94C',rules:[
+    {name:'Medd-i Tabii (Doğal Medd)',icon:'📏',desc:'Elif, vav veya ye\'den önce uygun hareke varsa 2 elif miktarı uzatılır. Tecvidin temelidir.',ar:'قَالَ',tr:'Kāle — 2 elif uzatma'},
+    {name:'Medd-i Muttasıl (Bitişik Medd)',icon:'↔️',desc:'Uzatma harfinden sonra aynı kelimede hemze gelirse 4–5 elif uzatılır.',ar:'جَاءَ',tr:'Cāe — 4-5 elif uzatma'},
+    {name:'Medd-i Munfasıl (Ayrık Medd)',icon:'⟷',desc:'Uzatma harfinden sonra ayrı kelimede hemze gelirse 4–5 elif uzatılır.',ar:'يَا أَيُّهَا',tr:'Yā eyyuhā'},
+  ]},
+  {title:'Kalkale — Sektirme',icon:'📙',color:'#A29BFE',rules:[
+    {name:'Kalkale Harfleri',icon:'🏀',desc:'Sükun halinde (ق ط ب ج د) harfleri okunurken ses hafifçe sektirilerek çıkarılır. "KATBECUD" olarak ezberlenebilir.',ar:'يَخْلُقُكُمْ',tr:'Yahlukukum (kaf ve kef\'te sektirme)'},
+  ]},
+  {title:'Mim Sakin Kuralları',icon:'📕',color:'#E07A5F',rules:[
+    {name:'İhfa-i Şefevi',icon:'🤫',desc:'Sükünlü mim\'den sonra "ba" (ب) gelirse mim genizden gizlenerek okunur.',ar:'تَرْمِيهِم بِحِجَارَةٍ',tr:'Tarmihim bihicara'},
+    {name:'İdgam-i Şefevi',icon:'👄',desc:'Sükünlü mim\'den sonra mim (م) gelirse, mimler şeddeli okunur.',ar:'لَكُم مَا',tr:'Lekumma'},
+    {name:'İzhar-i Şefevi',icon:'🔊',desc:'Sükünlü mim\'den sonra diğer harfler gelirse mim açıkça okunur.',ar:'أَنْعَمْتَ',tr:'En\'amte'},
+  ]},
+];
+
+// ════════════════════════════════════════════
+//  VERİ: ROZETLER
+// ════════════════════════════════════════════
+const BADGES = [
+  {id:'first',  icon:'🎯',name:'İlk Quiz',    ok:s=>s.quizTotal>=1},
+  {id:'streak3',icon:'🔥',name:'3 Gün Seri',  ok:s=>s.streak>=3},
+  {id:'streak7',icon:'💫',name:'7 Gün Seri',  ok:s=>s.streak>=7},
+  {id:'perfect',icon:'💎',name:'Mükemmel',    ok:s=>s.bestAcc>=100},
+  {id:'xp100',  icon:'⚡',name:'Enerjik',     ok:s=>s.totalXP>=100},
+  {id:'xp500',  icon:'🌟',name:'Yıldız',      ok:s=>s.totalXP>=500},
+  {id:'xp1000', icon:'🌙',name:'Ay Işığı',    ok:s=>s.totalXP>=1000},
+  {id:'lesson1',icon:'📚',name:'İlk Ders',    ok:s=>s.done.length>=1},
+  {id:'all4',   icon:'🕌',name:'Elifba',       ok:s=>['l1','l2','l3','l4'].every(x=>s.done.includes(x))},
+  {id:'q50',    icon:'🎓',name:'Öğrenci',      ok:s=>s.quizTotal>=50},
+  {id:'surah1', icon:'📖',name:'İlk Sure',     ok:s=>['fatiha','ihlas','felak','nas','asr','kevser'].some(x=>s.done.includes(x))},
+  {id:'tecvid', icon:'📗',name:'Tecvid Ustası',ok:s=>s.done.includes('tecvid')},
+];
+
+// ════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════
+const DEF = {xp:0,totalXP:0,level:1,streak:0,lastDay:null,done:[],badges:[],quizTotal:0,quizCorrect:0,bestAcc:0,sm2:{},childMode:false,notif:false};
+let S = Object.assign({...DEF}, JSON.parse(localStorage.getItem('quranApp')||'null')||{});
+if (!S.sm2) S.sm2 = {};
+function save(){localStorage.setItem('quranApp',JSON.stringify(S))}
+
+// ════════════════════════════════════════════
+//  STARS
+// ════════════════════════════════════════════
+(function(){
+  const cv=document.getElementById('stars'),cx=cv.getContext('2d');
+  function draw(){cv.width=innerWidth;cv.height=innerHeight;cx.clearRect(0,0,cv.width,cv.height);const n=Math.floor(cv.width*cv.height/3800);for(let i=0;i<n;i++){const x=Math.random()*cv.width,y=Math.random()*cv.height,r=Math.random()*1.4+.2,a=Math.random()*.65+.18;cx.beginPath();cx.arc(x,y,r,0,Math.PI*2);cx.fillStyle=`rgba(255,250,${200+Math.floor(Math.random()*55)},${a})`;cx.fill()}}
+  window.addEventListener('resize',draw);draw();
+})();
+
+// ════════════════════════════════════════════
+//  TTS
+// ════════════════════════════════════════════
+let arabicVoice=null;
+function initTTS(){if(!('speechSynthesis' in window))return;function f(){arabicVoice=speechSynthesis.getVoices().find(v=>v.lang.startsWith('ar'))||null}f();speechSynthesis.addEventListener('voiceschanged',f)}
+function speak(text,rate=0.62){
+  if(!('speechSynthesis' in window)){toast('🔇 Tarayıcı ses desteği yok');return}
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=arabicVoice?arabicVoice.lang:'ar-SA';
+  if(arabicVoice)u.voice=arabicVoice;
+  u.rate=rate;u.pitch=1.05;u.volume=1;
+  speechSynthesis.speak(u);
+  return u;
+}
+initTTS();
+
+// ════════════════════════════════════════════
+//  SM-2 ALGORITHM
+// ════════════════════════════════════════════
+function sm2Update(name,q){
+  let c=S.sm2[name]||{interval:1,rep:0,ef:2.5};
+  if(q<3){c.rep=0;c.interval=1}
+  else{
+    if(c.rep===0)c.interval=1;
+    else if(c.rep===1)c.interval=6;
+    else c.interval=Math.round(c.interval*c.ef);
+    c.rep++;
+    c.ef=Math.max(1.3,c.ef+0.1-(5-q)*(0.08+(5-q)*0.02));
+  }
+  const d=new Date();d.setDate(d.getDate()+c.interval);
+  c.next=d.toDateString();
+  S.sm2[name]=c;save();
+}
+function getDue(){
+  const today=new Date().toDateString();
+  return LETTERS.filter(l=>{const c=S.sm2[l.name];return !c||!c.next||new Date(c.next)<=new Date(today);});
+}
+
+// ════════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════════
+let activePage='home';
+const subPages=['lesson','surah','tecvid','yazma','quiz'];
+function navigate(pg){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+pg).classList.add('active');
+  const navMap={lesson:'lessons',surah:'lessons',tecvid:'lessons',yazma:'pratik',quiz:'pratik'};
+  const navTarget=navMap[pg]||pg;
+  const navEl=document.getElementById('nav-'+navTarget);
+  if(navEl)navEl.classList.add('active');
+  activePage=pg;
+  if(pg==='home')renderHome();
+  if(pg==='lessons')renderLessons();
+  if(pg==='pratik')renderPratik();
+  if(pg==='quiz')renderQuizShell();
+  if(pg==='profil'){renderBadges();renderProfilToggles();}
+}
+
+// ════════════════════════════════════════════
+//  HOME
+// ════════════════════════════════════════════
+function renderHome(){
+  const need=S.level*100,pct=Math.min(100,S.xp/need*100);
+  document.getElementById('xp-fill').style.width=pct+'%';
+  document.getElementById('xp-cur').textContent=S.xp;
+  document.getElementById('xp-max').textContent=need;
+  document.getElementById('level-num').textContent=S.level;
+  document.getElementById('streak-count').textContent=S.streak;
+  document.getElementById('stat-lessons').textContent=S.done.length;
+  document.getElementById('stat-xp').textContent=S.totalXP;
+  document.getElementById('stat-badges').textContent=S.badges.length;
+  document.getElementById('stat-acc').textContent=S.quizTotal?Math.round(S.quizCorrect/S.quizTotal*100)+'%':'—';
+  const due=getDue().length;
+  document.getElementById('daily-desc').textContent=due>0?`${due} harf tekrar için hazır!`:'Tüm harfleri tamamladın, quiz yap!';
+}
+
+// ════════════════════════════════════════════
+//  LESSONS
+// ════════════════════════════════════════════
+const CAT_LABELS={harfler:'📝 Harf Dersleri',hareke:'🎵 Hareke & Ses',tecvid:'📗 Tecvid Kuralları',sureler:'📖 Kısa Sureler'};
+function renderLessons(){
+  const el=document.getElementById('lessons-list');el.innerHTML='';
+  const cats=['harfler','hareke','tecvid','sureler'];
+  cats.forEach(cat=>{
+    const items=LESSONS.filter(l=>l.cat===cat);
+    if(!items.length)return;
+    el.innerHTML+=`<div class="cat-header">${CAT_LABELS[cat]}</div>`;
+    const wrap=document.createElement('div');wrap.className='lessons-list';wrap.style.marginBottom='8px';
+    items.forEach(ls=>{
+      const done=S.done.includes(ls.id);
+      const locked=ls.req&&!S.done.includes(ls.req);
+      const card=document.createElement('div');
+      card.className='lesson-card'+(locked?' locked':'');
+      card.innerHTML=`<div class="lesson-icon" style="background:${ls.bg}">${ls.icon}</div><div class="lesson-info"><div class="lesson-title" style="color:${locked?'var(--muted)':ls.color}">${ls.title}</div><div class="lesson-sub">${locked?'🔒 Önceki dersi bitir':ls.sub}</div><div class="lesson-prog"><div class="lesson-prog-fill" style="width:${done?100:0}%;background:${ls.color}"></div></div></div><div class="lesson-caret">${done?'✅':locked?'🔒':'›'}</div>`;
+      if(!locked)card.onclick=()=>openLesson(ls);
+      wrap.appendChild(card);
+    });
+    el.appendChild(wrap);
+  });
+}
+
+function openLesson(ls){
+  if(ls.isTecvid){navigate('tecvid');renderTecvid();return;}
+  if(ls.surahId){navigate('surah');renderSurah(ls.surahId);return;}
+  if(ls.isHareke){showHarekeModal();return;}
+  if(ls.isMadd){showMaddModal();return;}
+  currentLesson=ls;lvIdx=0;
+  navigate('lesson');renderLessonView();
+}
+
+// ════════════════════════════════════════════
+//  LESSON VIEW
+// ════════════════════════════════════════════
+let currentLesson=null,lvIdx=0;
+function renderLessonView(){
+  if(!currentLesson)return;
+  const L=LETTERS[currentLesson.letters[lvIdx]];
+  const total=currentLesson.letters.length;
+  document.getElementById('lv-arabic').textContent=L.ar;
+  document.getElementById('lv-name-tr').textContent=L.name;
+  document.getElementById('lv-name-ar').textContent=L.arabicName;
+  document.getElementById('lv-name-rom').textContent=L.roman;
+  document.getElementById('lv-makhraj').textContent=L.makhraj;
+  document.getElementById('lv-desc').textContent=L.desc;
+  document.getElementById('lv-ex-ar').textContent=L.example.ar;
+  document.getElementById('lv-ex-tr').textContent=L.example.tr;
+  document.getElementById('lv-counter').textContent=`${lvIdx+1} / ${total}`;
+  document.getElementById('lv-title-top').textContent=currentLesson.title;
+  document.getElementById('lv-prog-fill').style.width=((lvIdx/total)*100)+'%';
+  document.getElementById('lv-tap-hint').textContent='🔊 Sesi duymak için dokun';
+  document.getElementById('lv-stage').classList.remove('playing');
+  document.getElementById('lv-btn-prev').disabled=(lvIdx===0);
+  document.getElementById('lv-btn-prev').style.opacity=(lvIdx===0)?'.4':'1';
+  const isLast=lvIdx===total-1;
+  const nb=document.getElementById('lv-btn-next');
+  nb.textContent=isLast?'✓ Dersi Tamamla':'Sonraki →';
+  nb.className=isLast?'btn btn-teal':'btn btn-gold';
+}
+function playCurrentLetter(){
+  if(!currentLesson)return;
+  const L=LETTERS[currentLesson.letters[lvIdx]];
+  const u=speak(L.arabicName);
+  if(!u)return;
+  const stage=document.getElementById('lv-stage'),hint=document.getElementById('lv-tap-hint');
+  stage.classList.add('playing');hint.textContent='🔊 Oynatılıyor...';
+  u.onend=u.onerror=()=>{stage.classList.remove('playing');hint.textContent='🔊 Sesi duymak için dokun'};
+}
+function lvNext(){
+  const total=currentLesson.letters.length;
+  if(lvIdx<total-1){lvIdx++;renderLessonView();scrollTo({top:0,behavior:'smooth'});}
+  else{
+    if(!S.done.includes(currentLesson.id)){S.done.push(currentLesson.id);addXP(currentLesson.xp);checkBadges();save();}
+    showModal('🎉',currentLesson.title+' Tamamlandı!',`Harika iş! <strong>+${currentLesson.xp} XP</strong> kazandın.`,()=>navigate('lessons'));
+  }
+}
+function lvPrev(){if(lvIdx>0){lvIdx--;renderLessonView();scrollTo({top:0,behavior:'smooth'});}}
+
+// ════════════════════════════════════════════
+//  SURAH VIEW
+// ════════════════════════════════════════════
+let currentSurahId=null;
+function renderSurah(id){
+  currentSurahId=id;
+  const s=SURELER[id];
+  document.getElementById('surah-title').textContent=s.name;
+  const wrap=document.getElementById('surah-verses');wrap.innerHTML='';
+  s.verses.forEach((v,i)=>{
+    const card=document.createElement('div');card.className='verse-card';card.dataset.idx=i;
+    card.innerHTML=`<div class="verse-num">${i+1}</div><span class="verse-ar">${v.ar}</span><div class="verse-tr">${v.tr}</div>`;
+    card.onclick=()=>{
+      const u=speak(v.ar,0.5);
+      if(!u)return;
+      document.querySelectorAll('.verse-card').forEach(c=>c.classList.remove('playing'));
+      card.classList.add('playing');
+      if(u.onend!==undefined)u.onend=()=>card.classList.remove('playing');
+    };
+    wrap.appendChild(card);
+  });
+  // Mark done
+  const lsId=Object.keys(SURELER).find(k=>k===id);
+  const lesson=LESSONS.find(l=>l.surahId===lsId);
+  if(lesson&&!S.done.includes(lesson.id)){
+    S.done.push(lesson.id);addXP(lesson.xp);checkBadges();save();
+    setTimeout(()=>toast(`✅ +${lesson.xp} XP kazandın!`),500);
+  }
+}
+
+// ════════════════════════════════════════════
+//  TECVİD VIEW
+// ════════════════════════════════════════════
+function renderTecvid(){
+  const el=document.getElementById('tecvid-content');el.innerHTML='';
+  TECVID.forEach(cat=>{
+    const div=document.createElement('div');div.className='tecvid-rule';
+    const rulesHTML=cat.rules.map(r=>`
+      <div class="tecvid-item">
+        <div class="tecvid-item-name">${r.icon} ${r.name}</div>
+        <div class="tecvid-item-desc">${r.desc}</div>
+        <span class="tecvid-example" onclick="speak('${r.ar}',0.5)">${r.ar} 🔊</span>
+        <span class="tecvid-example-tr">${r.tr}</span>
+      </div>`).join('');
+    div.innerHTML=`<div class="tecvid-rule-header"><div class="tecvid-rule-icon" style="background:rgba(255,255,255,.06)">${cat.icon}</div><div><div class="tecvid-rule-title" style="color:${cat.color}">${cat.title}</div><div class="tecvid-rule-sub">${cat.rules.length} kural</div></div></div><div class="tecvid-rule-body">${rulesHTML}</div>`;
+    el.appendChild(div);
+  });
+  const lesson=LESSONS.find(l=>l.isTecvid);
+  if(lesson&&!S.done.includes(lesson.id)){
+    S.done.push(lesson.id);addXP(lesson.xp);checkBadges();save();
+    setTimeout(()=>toast(`📗 Tecvid dersi açıldı! +${lesson.xp} XP`),400);
+  }
+}
+
+// ════════════════════════════════════════════
+//  PRATİK HUB
+// ════════════════════════════════════════════
+function renderPratik(){
+  const due=getDue().length;
+  const grid=document.getElementById('pratik-grid');
+  grid.innerHTML=`
+    <div class="pratik-card highlight" onclick="startQuiz('harf')">
+      <span class="pratik-icon">🔤</span>
+      <div class="pratik-name">Harf Quizi</div>
+      <div class="pratik-desc">28 harf, 10 soru, can sistemi</div>
+    </div>
+    <div class="pratik-card" onclick="startQuiz('hareke')">
+      <span class="pratik-icon">✨</span>
+      <div class="pratik-name">Hareke Quizi</div>
+      <div class="pratik-desc">Harekeler ve işaretler</div>
+    </div>
+    <div class="pratik-card ${due>0?'highlight':''}" onclick="startQuiz('tekrar')">
+      ${due>0?'<span class="pratik-badge">'+due+' Bekliyor</span>':''}
+      <span class="pratik-icon">🔁</span>
+      <div class="pratik-name">Akıllı Tekrar</div>
+      <div class="pratik-desc">SM-2 algoritmasıyla kişisel tekrar planı</div>
+    </div>
+    <div class="pratik-card" onclick="startYazma()">
+      <span class="pratik-icon">✍️</span>
+      <div class="pratik-name">Harf Yazma</div>
+      <div class="pratik-desc">Canvas'a harfleri çiz ve öğren</div>
+    </div>`;
+}
+
+function startQuiz(mode){quizMode=mode;navigate('quiz');renderQuizShell();}
+
+// ════════════════════════════════════════════
+//  QUIZ
+// ════════════════════════════════════════════
+const QUIZ_LEN=10;
+let QS={},quizMode='harf';
+
+function setQuizMode(m){
+  quizMode=m;
+  document.querySelectorAll('.quiz-mode-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('qmode-'+m).classList.add('active');
+  initQuiz();
+}
+
+function renderQuizShell(){
+  document.getElementById('qmode-harf').classList.toggle('active',quizMode==='harf');
+  document.getElementById('qmode-hareke').classList.toggle('active',quizMode==='hareke');
+  document.getElementById('qmode-tekrar').classList.toggle('active',quizMode==='tekrar');
+  initQuiz();
+}
+
+function initQuiz(){
+  let pool;
+  if(quizMode==='tekrar'){
+    pool=getDue();
+    if(pool.length===0){
+      document.getElementById('quiz-inner').innerHTML=`<div style="text-align:center;padding:60px 24px"><div style="font-size:64px;margin-bottom:16px">🎉</div><div style="font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--gold);margin-bottom:8px">Hepsi Tamam!</div><div style="color:var(--muted);font-size:14px;margin-bottom:24px">Bugün tekrar edilecek harf yok.</div><button class="btn btn-teal" onclick="startQuiz('harf')">Harf Quizi Yap</button></div>`;
+      return;
+    }
+    pool=[...pool].sort(()=>Math.random()-.5).slice(0,Math.min(10,pool.length));
+  } else if(quizMode==='hareke'){
+    pool=null; // hareke mode uses HAREKELER
+  } else {
+    pool=[...LETTERS].sort(()=>Math.random()-.5).slice(0,QUIZ_LEN);
+  }
+
+  if(quizMode==='hareke'){
+    QS={mode:'hareke',qs:[...HAREKELER].sort(()=>Math.random()-.5).slice(0,QUIZ_LEN).map(q=>({q,opts:genHarekeOpts(q)})),cur:0,correct:0,lives:3,answered:false,done:false};
+  } else {
+    QS={mode:quizMode,qs:pool.map(q=>({q,opts:genLetterOpts(q)})),cur:0,correct:0,lives:3,answered:false,done:false};
+  }
+  renderQuiz();
+}
+
+function genLetterOpts(correct){
+  const others=LETTERS.filter(l=>l.name!==correct.name).sort(()=>Math.random()-.5).slice(0,3);
+  return [...others,correct].sort(()=>Math.random()-.5);
+}
+function genHarekeOpts(correct){
+  const others=HAREKELER.filter(h=>h.name!==correct.name).sort(()=>Math.random()-.5).slice(0,3);
+  return [...others,correct].sort(()=>Math.random()-.5);
+}
+
+function renderQuiz(){
+  const wrap=document.getElementById('quiz-inner');
+  if(QS.done){renderResult();return;}
+  const q=QS.qs[QS.cur];
+  const pct=(QS.cur/QS.qs.length)*100;
+  const hearts=[0,1,2].map(i=>`<span class="heart${i>=QS.lives?' lost':''}">❤️</span>`).join('');
+  const isHareke=QS.mode==='hareke';
+  const displayAr=isHareke?q.q.ar:q.q.ar;
+  const prompt=isHareke?'Bu hareke nedir?':'Bu harfin adı nedir?';
+  const optsHTML=q.opts.map(o=>{
+    const label=o.name;
+    const sub=isHareke?o.desc:o.roman;
+    return `<button class="opt" data-name="${o.name}" onclick="pickOpt(this,'${o.name}','${(isHareke?q.q:q.q).name}')">${label}<sub>${sub}</sub></button>`;
+  }).join('');
+  wrap.innerHTML=`
+    <div class="quiz-wrap">
+      <div class="quiz-meta"><span class="quiz-counter">${QS.cur+1} / ${QS.qs.length}</span><span class="quiz-correct">✓ ${QS.correct}</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+      <div class="lives">${hearts}</div>
+      <div class="letter-box" onclick="speak('${displayAr}',0.5)">
+        <span class="arabic-big${isHareke?' hareke':''}">${displayAr}</span>
+        <div class="letter-prompt">${prompt} &nbsp;🔊</div>
+      </div>
+      <div class="options-grid">${optsHTML}</div>
+      <div class="quiz-footer">XP: <span>${S.xp}</span></div>
+    </div>`;
+}
+
+window.pickOpt=function(btn,chosen,correct){
+  if(QS.answered)return;
+  QS.answered=true;
+  document.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  S.quizTotal++;
+  const isCorrect=chosen===correct;
+  if(isCorrect){
+    btn.classList.add('correct');QS.correct++;S.quizCorrect++;addXP(10);toast('+10 XP');
+    if(QS.mode!=='hareke'){sm2Update(correct,5);}
+    spawnConfetti();
+  } else {
+    btn.classList.add('wrong');QS.lives--;
+    document.querySelectorAll('.opt').forEach(b=>{if(b.dataset.name===correct)b.classList.add('correct');});
+    if(QS.mode!=='hareke'){sm2Update(correct,0);}
+  }
+  checkBadges();save();
+  if(QS.lives<=0){setTimeout(()=>{QS.done=true;renderResult();},1100);return;}
+  setTimeout(()=>{QS.cur++;QS.answered=false;if(QS.cur>=QS.qs.length)QS.done=true;renderQuiz();},900);
+};
+
+function renderResult(){
+  const wrap=document.getElementById('quiz-inner');
+  const total=QS.cur||1,acc=Math.round(QS.correct/total*100),xpE=QS.correct*10;
+  if(acc>S.bestAcc){S.bestAcc=acc;checkBadges();save();}
+  let emoji,title,sub;
+  if(acc>=90){emoji='🌟';title='Muhteşem!';sub='Gerçekten harika bir performans!';}
+  else if(acc>=70){emoji='😊';title='Çok İyi!';sub='Güzel iş, devam et!';}
+  else if(acc>=50){emoji='💪';title='Fena Değil!';sub='Pratik yaptıkça daha iyi olacaksın!';}
+  else{emoji='📖';title='Devam Et!';sub='Harfleri tekrar derslerden çalış!';}
+  wrap.innerHTML=`<div class="result-box"><span class="result-emoji">${emoji}</span><div class="result-title">${title}</div><div class="result-sub">${sub}</div><div class="result-stats"><div><div class="r-stat-num" style="color:var(--green)">${QS.correct}</div><div class="r-stat-lbl">Doğru</div></div><div><div class="r-stat-num">${acc}%</div><div class="r-stat-lbl">Doğruluk</div></div><div><div class="r-stat-num" style="color:var(--gold)">+${xpE}</div><div class="r-stat-lbl">XP</div></div></div><div class="result-btns"><button class="btn btn-teal" onclick="initQuiz()">🔄 Tekrar</button><button class="btn btn-ghost" onclick="navigate('pratik')">← Pratik</button></div></div>`;
+}
+
+// Klavye kısayolları
+document.addEventListener('keydown',e=>{
+  if(activePage!=='quiz'||QS.answered||QS.done)return;
+  const map={'1':0,'2':1,'3':2,'4':3};
+  if(map[e.key]!==undefined){const opts=document.querySelectorAll('.opt');if(opts[map[e.key]])opts[map[e.key]].click();}
+});
+
+// ════════════════════════════════════════════
+//  YAZMA (CANVAS)
+// ════════════════════════════════════════════
+let yazmaIdx=0,yazmaDrawn=false;
+function startYazma(){yazmaIdx=0;navigate('yazma');renderYazma();}
+function renderYazma(){
+  const L=LETTERS[yazmaIdx];
+  document.getElementById('yazma-ref-letter').textContent=L.ar;
+  document.getElementById('yazma-ref-name').textContent=L.name+' · '+L.roman;
+  document.getElementById('yazma-ghost').textContent=L.ar;
+  document.getElementById('yazma-counter-top').textContent=`${yazmaIdx+1} / ${LETTERS.length}`;
+  yazmaClear();initCanvas();
+}
+function yazmaPlay(){const L=LETTERS[yazmaIdx];speak(L.arabicName);}
+function yazmaJudge(ok){
+  if(ok){addXP(5);toast('+5 XP · Tebrikler!');spawnConfetti();}
+  else{toast('Tekrar dene, olur!');}
+  if(yazmaIdx<LETTERS.length-1){yazmaIdx++;setTimeout(()=>renderYazma(),600);}
+  else{showModal('🎉','Tüm Harfleri Yazdın!','Harika iş! Yazma pratiğini tamamladın.',()=>navigate('pratik'));}
+}
+
+let cvs,ctxw,drawing=false,lastX=0,lastY=0;
+function initCanvas(){
+  cvs=document.getElementById('yazma-canvas');
+  ctxw=cvs.getContext('2d');
+  const wrap=cvs.parentElement;
+  cvs.width=wrap.clientWidth||300;cvs.height=wrap.clientHeight||300;
+  ctxw.strokeStyle='#F2C94C';ctxw.lineWidth=4;ctxw.lineCap='round';ctxw.lineJoin='round';
+  yazmaDrawn=false;
+  cvs.onpointerdown=e=>{drawing=true;const r=cvs.getBoundingClientRect();lastX=e.clientX-r.left;lastY=e.clientY-r.top;cvs.setPointerCapture(e.pointerId)};
+  cvs.onpointermove=e=>{if(!drawing)return;const r=cvs.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;ctxw.beginPath();ctxw.moveTo(lastX,lastY);ctxw.lineTo(x,y);ctxw.stroke();lastX=x;lastY=y;yazmaDrawn=true;};
+  cvs.onpointerup=()=>drawing=false;
+}
+function yazmaClear(){if(ctxw&&cvs)ctxw.clearRect(0,0,cvs.width,cvs.height);}
+
+// ════════════════════════════════════════════
+//  HAREKE & MADD MODALS
+// ════════════════════════════════════════════
+function showHarekeModal(){
+  const overlay=document.createElement('div');overlay.className='modal-overlay';
+  overlay.innerHTML=`<div class="modal-box"><span class="modal-emoji">🎵</span><div class="modal-title">Harekeler</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">${HAREKELER.map(h=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="speak('${h.speak}')"><span style="font-family:'Amiri',serif;font-size:42px;direction:rtl;display:block">${h.ar}</span><div style="color:var(--gold);font-weight:900;font-size:13px;margin-top:4px">${h.name}</div><div style="color:var(--muted);font-size:11px">${h.desc}</div></div>`).join('')}</div><div style="display:flex;gap:10px;justify-content:center"><button class="btn btn-gold" onclick="completeSpecial('hareke',80,this)">Tamamla · +80 XP</button><button class="btn btn-ghost" onclick="this.closest('.modal-overlay').remove()">Kapat</button></div></div>`;
+  document.body.appendChild(overlay);
+}
+function showMaddModal(){
+  const overlay=document.createElement('div');overlay.className='modal-overlay';
+  overlay.innerHTML=`<div class="modal-box"><span class="modal-emoji">🎶</span><div class="modal-title">Uzun Sesler (Medd)</div><div class="modal-body">Üç uzatma harfi:<br><br><div style="display:flex;justify-content:center;gap:24px;margin:12px 0">${[['ا','Elif · â'],['و','Vav · û'],['ي','Ye · î']].map(([ar,d])=>`<div style="text-align:center;cursor:pointer" onclick="speak('${ar}',0.5)"><span style="font-family:'Amiri',serif;font-size:48px;direction:rtl;display:block;color:var(--gold)">${ar}</span><div style="font-size:11px;color:var(--muted);font-weight:700">${d}</div></div>`).join('')}</div><span style="font-family:'Amiri',serif;font-size:32px;direction:rtl;display:block;text-align:center;margin:14px 0;color:var(--teal);cursor:pointer" onclick="speak('قال يقول قيل',0.5)">قَالَ · يَقُولُ · قِيلَ</span><small style="color:var(--muted);display:block;text-align:center">2 veya daha fazla hareke uzatılır</small></div><div style="display:flex;gap:10px;justify-content:center;margin-top:16px"><button class="btn btn-gold" onclick="completeSpecial('madd',90,this)">Tamamla · +90 XP</button><button class="btn btn-ghost" onclick="this.closest('.modal-overlay').remove()">Kapat</button></div></div>`;
+  document.body.appendChild(overlay);
+}
+window.completeSpecial=function(id,xpAmt,btn){
+  if(!S.done.includes(id)){S.done.push(id);addXP(xpAmt);checkBadges();save();toast(`✅ +${xpAmt} XP!`);}
+  else toast('Zaten tamamlandı ✓');
+  btn.closest('.modal-overlay').remove();renderLessons();
+};
+
+// ════════════════════════════════════════════
+//  PROFİL
+// ════════════════════════════════════════════
+function renderBadges(){
+  const grid=document.getElementById('badges-grid');grid.innerHTML='';
+  BADGES.forEach(b=>{
+    const earned=S.badges.includes(b.id);
+    const div=document.createElement('div');div.className='badge-item'+(earned?' earned':'');
+    div.title=earned?'Kazanıldı!':'Henüz kazanılmadı';
+    div.innerHTML=`<span class="badge-icon">${b.icon}</span><div class="badge-name">${b.name}</div>`;
+    grid.appendChild(div);
+  });
+}
+function renderProfilToggles(){
+  document.getElementById('toggle-child').className='toggle'+(S.childMode?' on':'');
+  document.getElementById('toggle-notif').className='toggle'+(S.notif?' on':'');
+}
+function toggleChild(){
+  S.childMode=!S.childMode;save();
+  document.body.classList.toggle('child-mode',S.childMode);
+  renderProfilToggles();
+  toast(S.childMode?'👶 Çocuk modu açık':'Çocuk modu kapalı');
+}
+function toggleNotif(){
+  if(!S.notif&&'Notification' in window){
+    Notification.requestPermission().then(p=>{
+      S.notif=p==='granted';save();renderProfilToggles();
+      toast(S.notif?'🔔 Hatırlatıcı açık':'Bildirim izni reddedildi');
+    });
+  } else {S.notif=false;save();renderProfilToggles();toast('🔕 Hatırlatıcı kapalı');}
+}
+function resetApp(){
+  showModal('⚠️','Emin misin?','Tüm ilerleme, XP ve rozetler silinecek. Bu işlem geri alınamaz.',()=>{
+    localStorage.removeItem('quranApp');
+    S={...DEF};save();location.reload();
+  });
+}
+
+// ════════════════════════════════════════════
+//  XP & BADGES
+// ════════════════════════════════════════════
+function addXP(n){
+  S.xp+=n;S.totalXP+=n;
+  const need=S.level*100;
+  if(S.xp>=need){S.xp-=need;S.level++;setTimeout(()=>toast(`🎉 Seviye ${S.level}!`),300);}
+  save();if(activePage==='home')renderHome();
+}
+function checkBadges(){
+  BADGES.forEach(b=>{if(!S.badges.includes(b.id)&&b.ok(S)){S.badges.push(b.id);setTimeout(()=>toast(`🏆 Rozet: ${b.name}`),500);save();}});
+}
+
+// ════════════════════════════════════════════
+//  CONFETTI (çocuk modu + doğru cevap)
+// ════════════════════════════════════════════
+function spawnConfetti(){
+  if(!S.childMode)return;
+  const colors=['#F2C94C','#4ECDC4','#A29BFE','#E07A5F','#56CFB2'];
+  for(let i=0;i<20;i++){
+    const el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*1.5}s;animation-delay:${Math.random()*.4}s`;
+    document.body.appendChild(el);setTimeout(()=>el.remove(),3000);
+  }
+}
+
+// ════════════════════════════════════════════
+//  TOAST & MODAL
+// ════════════════════════════════════════════
+function toast(msg){const el=document.createElement('div');el.className='toast';el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),1700);}
+function showModal(emoji,title,body,onOk){
+  const ov=document.createElement('div');ov.className='modal-overlay';
+  ov.innerHTML=`<div class="modal-box"><span class="modal-emoji">${emoji}</span><div class="modal-title">${title}</div><div class="modal-body">${body}</div><div style="display:flex;gap:10px;justify-content:center"><button class="btn btn-gold" id="mok">Tamam</button><button class="btn btn-ghost" id="mcancel">İptal</button></div></div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#mok').onclick=()=>{ov.remove();onOk&&onOk();};
+  ov.querySelector('#mcancel').onclick=()=>ov.remove();
+}
+
+// ════════════════════════════════════════════
+//  STREAK & NOTIF CHECK
+// ════════════════════════════════════════════
+(function(){
+  const today=new Date().toDateString();
+  if(S.lastDay!==today){
+    const yd=new Date();yd.setDate(yd.getDate()-1);
+    S.streak=(S.lastDay===yd.toDateString())?S.streak+1:1;
+    S.lastDay=today;checkBadges();save();
+    if(S.notif&&'Notification' in window&&Notification.permission==='granted'){
+      new Notification('Kur\'an-ı Kerim Öğreniyorum',{body:'Bugünkü dersini yapmayı unutma! 📖',icon:''});
+    }
+  }
+})();
+
+// ════════════════════════════════════════════
+//  BOOT
+// ════════════════════════════════════════════
+if(S.childMode)document.body.classList.add('child-mode');
+renderHome();
+window.speak=speak;
+</script>
+</body>
+</html>
