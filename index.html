@@ -2,7 +2,11 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#080B18">
   <title>Kur'an-ı Kerim Öğreniyorum</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Nunito:wght@400;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
@@ -14,10 +18,25 @@
       --green:#56CFB2;--purple:#A29BFE;--text:#F0EBE3;--muted:#8B87A6;
       --border:rgba(242,201,76,.16);--radius:18px;
     }
-    html,body{height:100%;background:var(--deep);color:var(--text);font-family:'Nunito',sans-serif;overflow-x:hidden}
-    #stars{position:fixed;inset:0;pointer-events:none;z-index:0}
-    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(90,20,160,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 85% 100%,rgba(0,100,130,.22) 0%,transparent 70%);pointer-events:none;z-index:0}
-    #app{position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:88px}
+    html{
+      overflow-x:hidden;
+      overscroll-behavior:none;
+      -webkit-text-size-adjust:100%;
+      touch-action:pan-y;
+    }
+    body{
+      height:100%;
+      background:var(--deep);
+      color:var(--text);
+      font-family:'Nunito',sans-serif;
+      overflow-x:hidden;
+      overscroll-behavior:none;
+      position:relative;
+      width:100%;
+    }
+    #stars{position:fixed;inset:0;pointer-events:none;z-index:0;width:100%;height:100%}
+    body::before{content:'';position:fixed;inset:0;width:100%;height:100%;background:radial-gradient(ellipse 60% 50% at 15% 0%,rgba(90,20,160,.28) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 85% 100%,rgba(0,100,130,.22) 0%,transparent 70%);pointer-events:none;z-index:0}
+    #app{position:relative;z-index:1;max-width:480px;width:100%;margin:0 auto;min-height:100vh;padding-bottom:88px;overflow-x:hidden}
 
     /* HEADER */
     .header{padding:24px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start}
@@ -244,9 +263,21 @@
     /* SM2 badge */
     .due-badge{background:rgba(224,122,95,.15);border:1px solid rgba(224,122,95,.3);color:var(--coral);border-radius:8px;padding:3px 9px;font-size:10px;font-weight:900}
 
+    /* INPUT — iOS zoom engelle (min 16px) */
+    input,textarea,select{font-size:16px !important;-webkit-appearance:none;appearance:none}
+
     /* NAV */
-    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(6,9,20,.96);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:100;padding:8px 0 20px}
-    .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 0;transition:all .2s}
+    .bottom-nav{
+      position:fixed;bottom:0;left:0;right:0;
+      width:100%;max-width:480px;margin:0 auto;
+      background:rgba(6,9,20,.97);
+      backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+      border-top:1px solid var(--border);
+      display:flex;z-index:100;
+      padding:8px 0;
+      padding-bottom:calc(8px + env(safe-area-inset-bottom));
+    }
+    .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 0;transition:all .2s;-webkit-tap-highlight-color:transparent;min-height:44px;justify-content:center}
     .nav-icon{font-size:22px;transition:transform .2s}
     .nav-label{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
     .nav-item.active .nav-icon{transform:scale(1.2)}
@@ -257,6 +288,17 @@
     .page.active{display:block;animation:fadeUp .3s ease}
     @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
     .page-hdr{padding:28px 20px 16px;font-family:'Cinzel Decorative',serif;font-size:15px;color:var(--gold)}
+
+    /* MOBİL GENEL */
+    button,a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+    .btn{min-height:44px}
+    .opt{min-height:52px}
+    .lesson-card,.pratik-card,.badge-item,.verse-card{-webkit-tap-highlight-color:transparent}
+    .pratik-grid{touch-action:pan-y}
+    .lessons-list{touch-action:pan-y}
+
+    /* iPhone notch/home bar desteği */
+    #app{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
   </style>
 </head>
 <body>
