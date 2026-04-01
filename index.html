@@ -786,7 +786,7 @@ function renderLessons(){
   cats.forEach(cat=>{
     const items=LESSONS.filter(l=>l.cat===cat);
     if(!items.length)return;
-    el.innerHTML+=`<div class="cat-header">${CAT_LABELS[cat]}</div>`;
+    const header=document.createElement('div');header.className='cat-header';header.textContent=CAT_LABELS[cat];el.appendChild(header);
     const wrap=document.createElement('div');wrap.className='lessons-list';wrap.style.marginBottom='8px';
     items.forEach(ls=>{
       const done=S.done.includes(ls.id);
